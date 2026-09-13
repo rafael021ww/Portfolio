@@ -1,146 +1,35 @@
-/* =========================
-   SCROLL REVEAL
-========================= */
 
-const observer =
-new IntersectionObserver(
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add("visible");
+  });
+}, {threshold:.1});
+document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 
-    entries => {
-
-        entries.forEach(entry => {
-
-            if(entry.isIntersecting){
-
-                entry.target.classList.add("visible");
-
-            }
-
-        });
-
-    },
-
-    {
-        threshold: .12
-    }
-
-);
-
-
-document
-.querySelectorAll(".reveal")
-.forEach(element => {
-
-    observer.observe(element);
-
+const cursor = document.querySelector(".cursor");
+const ring = document.querySelector(".cursor-ring");
+window.addEventListener("mousemove", e => {
+  if (!cursor || !ring) return;
+  cursor.style.left=e.clientX+"px"; cursor.style.top=e.clientY+"px";
+  ring.style.left=e.clientX+"px"; ring.style.top=e.clientY+"px";
 });
 
-
-
-/* =========================
-   CUSTOM CURSOR
-========================= */
-
-const cursor =
-document.querySelector(".cursor");
-
-const ring =
-document.querySelector(".cursor-ring");
-
-
-window.addEventListener(
-    "mousemove",
-    event => {
-
-        cursor.style.left =
-            event.clientX + "px";
-
-        cursor.style.top =
-            event.clientY + "px";
-
-        ring.style.left =
-            event.clientX + "px";
-
-        ring.style.top =
-            event.clientY + "px";
-
-    }
-);
-
-
-
-/* =========================
-   CURSOR HOVER
-========================= */
-
-document
-.querySelectorAll("a,.card,.interest")
-.forEach(element => {
-
-    element.addEventListener(
-        "mouseenter",
-        () => {
-
-            ring.style.width = "65px";
-
-            ring.style.height = "65px";
-
-        }
-    );
-
-
-    element.addEventListener(
-        "mouseleave",
-        () => {
-
-            ring.style.width = "38px";
-
-            ring.style.height = "38px";
-
-        }
-    );
-
+document.querySelectorAll("a,.card,.interest,.mail-box").forEach(el=>{
+  el.addEventListener("mouseenter",()=>{
+    if(!ring)return;
+    ring.style.width="64px"; ring.style.height="64px";
+  });
+  el.addEventListener("mouseleave",()=>{
+    if(!ring)return;
+    ring.style.width="34px"; ring.style.height="34px";
+  });
 });
 
-
-
-/* =========================
-   MAGNETIC ENQUIRE BUTTON
-========================= */
-
-const button =
-document.querySelector(".enquire-btn");
-
-
-button.addEventListener(
-    "mousemove",
-    event => {
-
-        const rect =
-        button.getBoundingClientRect();
-
-        const x =
-        event.clientX -
-        rect.left -
-        rect.width / 2;
-
-        const y =
-        event.clientY -
-        rect.top -
-        rect.height / 2;
-
-
-        button.style.transform =
-        `translate(${x*.15}px,${y*.15}px)`;
-
-    }
-);
-
-
-button.addEventListener(
-    "mouseleave",
-    () => {
-
-        button.style.transform = "";
-
-    }
-);
+const btn=document.querySelector(".enquire-btn");
+if(btn){
+  btn.addEventListener("mousemove",e=>{
+    const r=btn.getBoundingClientRect();
+    btn.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.10}px,${(e.clientY-r.top-r.height/2)*.10}px)`;
+  });
+  btn.addEventListener("mouseleave",()=>btn.style.transform="");
+}
